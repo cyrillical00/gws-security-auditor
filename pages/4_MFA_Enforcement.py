@@ -101,7 +101,7 @@ def color_status(val):
         return "color: #ef4444; font-weight: 600"
     return "color: #eab308; font-weight: 600"
 
-styled_ou = ou_df.style.applymap(color_status, subset=["Status"])
+styled_ou = ou_df.style.map(color_status, subset=["Status"])
 st.dataframe(styled_ou, use_container_width=True, hide_index=True)
 
 st.markdown("---")
@@ -124,7 +124,7 @@ else:
     def color_exception(val):
         return "color: #22c55e" if val == "Yes" else "color: #f97316; font-weight: 600"
 
-    styled_unenrolled = unenrolled_df.style.applymap(color_exception, subset=["Exception Documented"])
+    styled_unenrolled = unenrolled_df.style.map(color_exception, subset=["Exception Documented"])
     st.dataframe(styled_unenrolled, use_container_width=True, hide_index=True)
 
     csv = unenrolled_df.to_csv(index=False)

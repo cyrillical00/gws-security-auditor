@@ -60,7 +60,7 @@ else:
         }
         return colors.get(val, "")
 
-    styled = df.style.applymap(color_severity, subset=["Severity"])
+    styled = df.style.map(color_severity, subset=["Severity"])
     st.dataframe(styled, use_container_width=True, hide_index=True)
 
     st.markdown("---")
@@ -113,5 +113,5 @@ def color_cat_status(val):
         return "color: #22c55e"
     return "color: #f97316; font-weight: 600"
 
-styled_cat = cat_df.style.applymap(color_cat_status, subset=["Status"])
+styled_cat = cat_df.style.map(color_cat_status, subset=["Status"])
 st.dataframe(styled_cat, use_container_width=True, hide_index=True)

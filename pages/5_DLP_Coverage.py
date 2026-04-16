@@ -85,7 +85,7 @@ else:
             return "color: #22c55e"
         return "color: #f97316; font-weight: 600"
 
-    styled = cov_df.style.applymap(color_status, subset=["Status"])
+    styled = cov_df.style.map(color_status, subset=["Status"])
     st.dataframe(styled, use_container_width=True, hide_index=True)
 
 st.markdown("---")

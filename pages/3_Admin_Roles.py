@@ -69,7 +69,7 @@ def color_severity(val):
     }
     return colors.get(val, "")
 
-styled = df.style.applymap(color_severity, subset=["Severity"])
+styled = df.style.map(color_severity, subset=["Severity"])
 
 st.dataframe(
     styled,

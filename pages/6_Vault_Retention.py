@@ -63,7 +63,7 @@ if ous_without_rule:
     def color_sev(val):
         return "color: #eab308; font-weight: 600"
 
-    styled_gap = gap_df.style.applymap(color_sev, subset=["Severity"])
+    styled_gap = gap_df.style.map(color_sev, subset=["Severity"])
     st.dataframe(styled_gap, use_container_width=True, hide_index=True)
 
 st.markdown("---")
@@ -104,7 +104,7 @@ if suspended_users:
             return "color: #f97316; font-weight: 600"
         return ""
 
-    styled_sus = sus_df.style.applymap(highlight_nonzero, subset=["Active Group Memberships", "Shared Drive Edit Access"])
+    styled_sus = sus_df.style.map(highlight_nonzero, subset=["Active Group Memberships", "Shared Drive Edit Access"])
     st.dataframe(styled_sus, use_container_width=True, hide_index=True)
 else:
     st.success("No suspended users found with active access.")
