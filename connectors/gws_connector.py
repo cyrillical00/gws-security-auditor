@@ -10,6 +10,8 @@ import json
 import streamlit as st
 from datetime import datetime, timezone, timedelta
 
+import auth
+
 try:
     from googleapiclient.discovery import build
     from google.oauth2 import service_account
@@ -26,6 +28,11 @@ SCOPES = [
 
 
 def _build_credentials():
+    # The delegated credentials read the whole tenant. Refuse to build them
+    # for a session that is not a signed-in, allow-listed user, whatever the
+    # calling page did or did not check.
+    auth.require_live_access()
+
     if not GCP_AVAILABLE:
         raise RuntimeError(
             "Google API libraries not installed. Run: pip install google-api-python-client google-auth google-auth-httplib2"
