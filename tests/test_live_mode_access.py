@@ -119,6 +119,13 @@ class ConnectorGuardTests(unittest.TestCase):
         sa.Credentials.from_service_account_info.assert_called_once()
 
 
+class ScopeTests(unittest.TestCase):
+    def test_delegated_scopes_are_all_read_only(self):
+        self.assertTrue(gws_connector.SCOPES)
+        for scope in gws_connector.SCOPES:
+            self.assertTrue(scope.endswith(".readonly"), scope)
+
+
 class RealStreamlitTests(unittest.TestCase):
     """Run the real pages under Streamlit's test harness with live secrets configured."""
 

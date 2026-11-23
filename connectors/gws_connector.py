@@ -19,11 +19,12 @@ try:
 except ImportError:
     GCP_AVAILABLE = False
 
+# Read-only scopes only. The delegated credentials act as a super admin, so
+# nothing here may allow a change to the tenant.
 SCOPES = [
     "https://www.googleapis.com/auth/admin.directory.user.readonly",
     "https://www.googleapis.com/auth/admin.directory.group.readonly",
     "https://www.googleapis.com/auth/admin.reports.audit.readonly",
-    "https://www.googleapis.com/auth/apps.alerts",
 ]
 
 

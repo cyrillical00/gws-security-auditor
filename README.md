@@ -41,8 +41,9 @@ In the Google Admin console (Security > API controls > Domain-wide delegation), 
 https://www.googleapis.com/auth/admin.directory.user.readonly
 https://www.googleapis.com/auth/admin.directory.group.readonly
 https://www.googleapis.com/auth/admin.reports.audit.readonly
-https://www.googleapis.com/auth/apps.alerts
 ```
+
+All three are read-only. Do not grant the service account anything broader; in particular `https://www.googleapis.com/auth/apps.alerts`, which earlier versions of this README listed, is a read/write scope the app never used. Remove it from the delegation entry if you added it.
 
 ### 3. Configure secrets
 
