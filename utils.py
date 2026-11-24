@@ -2,6 +2,8 @@
 
 import streamlit as st
 
+import auth
+
 
 CATEGORY_ICONS = {
     "External Sharing": "🔗",
@@ -81,7 +83,9 @@ def get_data() -> dict:
 
 
 def _load_data():
-    demo_mode = st.session_state.get("demo_mode", True)
+    # Anything other than an explicit "live" from a session with live access
+    # gets the synthetic data set.
+    demo_mode = st.session_state.get("demo_mode", True) is not False or not auth.live_access_allowed()
     if demo_mode:
         from connectors.demo_data import load_all
     else:
@@ -126,17 +130,31 @@ def sidebar_demo_toggle():
     if "demo_mode" not in st.session_state:
         st.session_state.demo_mode = True
 
+    # Live mode audits the real tenant, so the switch exists only for a
+    # signed-in user on the allow list. A session that is not entitled to it
+    # is put back on demo data, along with anything it had loaded.
+    live_allowed = auth.live_access_allowed()
+    if not live_allowed and st.session_state.demo_mode is not True:
+        st.session_state.demo_mode = True
+        reset_cache()
+
     with st.sidebar:
         st.markdown("### GWS Security Auditor")
         st.markdown("---")
-        current = st.session_state.demo_mode
-        toggled = st.toggle("Demo Mode (Apex Labs)", value=current)
-        if toggled != current:
-            st.session_state.demo_mode = toggled
-            reset_cache()
-            st.rerun()
-        if st.session_state.demo_mode:
-            st.info("Synthetic data - no credentials required")
+        if live_allowed:
+            current = st.session_state.demo_mode
+            toggled = st.toggle("Demo Mode (Apex Labs)", value=current)
+            if toggled != current:
+                st.session_state.demo_mode = toggled
+                reset_cache()
+                st.rerun()
+            if st.session_state.demo_mode:
+                st.info("Synthetic data - no credentials required")
+            else:
+                st.warning("Live mode: configure secrets.toml")
+            st.caption(f"Signed in: {auth.current_user()}")
         else:
-            st.warning("Live mode: configure secrets.toml")
+            st.info("Demo Mode (Apex Labs): synthetic data - no credentials required")
+            st.caption("Live mode audits a real Workspace tenant and needs a sign-in.")
+            auth.render_sign_in(key="sidebar_sign_in")
         st.markdown("---")
